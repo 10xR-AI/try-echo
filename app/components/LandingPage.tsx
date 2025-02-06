@@ -7,8 +7,8 @@ export default function LandingPage() {
       <div className="container mx-auto px-4 py-12 md:py-24">
         <div className="flex flex-col items-center text-center">
           {/* Logo */}
-          <div className="mb-16 md:mb-24">
-            Echo.
+          <div className="mb-16 md:mb-24 text-[80px] text-[#559EFF] font-bold">
+            echo.
           </div>
 
           {/* Headline */}
