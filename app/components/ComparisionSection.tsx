@@ -1,7 +1,14 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { BookOpen, MessageSquare, Users, GitBranch, ClipboardList, Bot, MessageCircle, Network, LineChart, RefreshCw } from 'lucide-react'
+import {LucideIcon, BookOpen, MessageSquare, Users, GitBranch, ClipboardList, Bot, MessageCircle, Network, LineChart, RefreshCw } from 'lucide-react'
+
+
+interface ComparisonItemProps {
+  text: string;
+  icon: LucideIcon;
+  isEcho?: boolean;
+}
 
 export default function ComparisonSection() {
   const container = {
@@ -21,7 +28,7 @@ export default function ComparisonSection() {
 
   
 
-  const ComparisonItem = ({ text, icon: Icon, isEcho = false }) => (
+  const ComparisonItem = ({ text, icon: Icon, isEcho = false }: ComparisonItemProps) => (
     <motion.li 
       variants={item}
       className={`flex items-start space-x-4 p-4 rounded-lg transition-all duration-300
