@@ -60,9 +60,9 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-8 max-w-4xl text-4xl font-bold leading-tight md:text-6xl md:leading-tight"
           >
-            Transform Static Learning into{" "}
+            Transform Learning & Training into  
             <span className="bg-gradient-to-r from-[#559EFF] to-[#1065BA] bg-clip-text text-transparent">
-              Interactive Conversations
+               &nbsp; Interactive Experiences
             </span>
           </motion.h1>
 
@@ -73,9 +73,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mb-12 max-w-3xl text-lg text-[#000D20]/80 md:text-xl"
           >
-            Echo turns educational content into AI-powered voice interactions, delivering{" "}
-            <span className="font-semibold text-[#1065BA]">40% + higher retention rates</span> for students and
-            trainees.
+            Echo transforms both educational content and corporate training materials into AI-powered conversations, delivering 40% higher retention rates across classrooms and workplaces.
           </motion.p>
 
           {/* CTA Button with hover effect */}
@@ -85,8 +83,8 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             <Link
-              href="#request-access"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
+              href="/form"
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105 m-2"
             >
               <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">
                 <motion.span
@@ -96,6 +94,30 @@ export default function LandingPage() {
                   className="inline-flex items-center"
                 >
                   Request early access
+                  <svg
+                    className="ml-2 h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.span>
+              </span>
+            </Link>
+            <Link
+              href="/try"
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
+            >
+              <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">
+                <motion.span
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                  transition={{ duration: 0.3 }}
+                  className="inline-flex items-center"
+                >
+                  Try Here
                   <svg
                     className="ml-2 h-5 w-5"
                     fill="none"
