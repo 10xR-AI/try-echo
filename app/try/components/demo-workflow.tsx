@@ -13,7 +13,7 @@ import {
 
 } from 'lucide-react';
 
-
+import AnalyticsDashboard from './echo-analytics';
 
 interface UploadedFile {
   name: string;
@@ -573,62 +573,7 @@ const DemoWorkflow = () => {
   );
 
   const AnalyticsContent = () => (
-    <div className="space-y-8">
-      {/* Time Spent */}
-      <div className="bg-white p-6 rounded-xl shadow-sm">
-        <h3 className="text-xl font-semibold mb-4">Time Spent</h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <div className="text-3xl font-bold text-blue-600 mb-2">{analyticsData.timeSpent.average}</div>
-            <div className="text-gray-600">Average time per student</div>
-          </div>
-          <div>
-            {analyticsData.timeSpent.bySlide.map((slide, index) => (
-              <div key={index} className="flex justify-between items-center mb-2">
-                <span>Slide {slide.slide}</span>
-                <span className="font-medium">{slide.time}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Questions & Knowledge Levels */}
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-xl font-semibold mb-4">Questions Asked</h3>
-          <div className="text-3xl font-bold text-blue-600 mb-4">
-            {analyticsData.questionsAsked}
-          </div>
-          <div className="space-y-2">
-            <h4 className="font-medium mb-2">Common Questions:</h4>
-            {analyticsData.commonQuestions.map((question, index) => (
-              <div key={index} className="text-gray-600">• {question}</div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm">
-          <h3 className="text-xl font-semibold mb-4">Knowledge Levels</h3>
-          <div className="space-y-4">
-            {Object.entries(analyticsData.knowledgeLevels).map(([level, percentage]) => (
-              <div key={level}>
-                <div className="flex justify-between mb-1">
-                  <span className="capitalize">{level}</span>
-                  <span>{percentage}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 rounded-full h-2" 
-                    style={{ width: percentage }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+  <AnalyticsDashboard />    
   );
 
   // Define steps array
