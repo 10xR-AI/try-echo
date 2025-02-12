@@ -29,12 +29,38 @@ export default function RequestAccessForm() {
     { value: '5000+', label: '5,000+ learners' }
   ]
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    // Handle form submission - integrate with your backend
-    console.log('Form submitted:', formData)
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('/api/submit-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+  
+      // Clear form
+      setFormData({
+        name: '',
+        email: '',
+        useCase: '',
+        audienceSize: ''
+      });
+      
+      // Optionally show success message
+      alert('Form submitted successfully!');
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit form');
+    }
   }
-
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target
     setFormData(prev => ({

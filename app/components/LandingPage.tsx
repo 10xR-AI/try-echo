@@ -76,86 +76,6 @@ export default function LandingPage() {
             Echo transforms both educational content and corporate training materials into AI-powered conversations, delivering 40% higher retention rates across classrooms and workplaces.
           </motion.p>
 
-          {/* CTA Button with hover effect */}
-          {/* <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Link
-              href="/form"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105 m-2"
-            >
-              <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">
-                <motion.span
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.3 }}
-                  className="inline-flex items-center"
-                >
-                  Request early access
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.span>
-              </span>
-            </Link>
-            <Link
-              href="/try"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
-            >
-              <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">
-                <motion.span
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.3 }}
-                  className="inline-flex items-center"
-                >
-                  Watch Video
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.span>
-              </span>
-            </Link>
-            <Link
-              href="/try"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
-            >
-              <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">
-                <motion.span
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.3 }}
-                  className="inline-flex items-center"
-                >
-                  Try Echo
-                  <svg
-                    className="ml-2 h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.span>
-              </span>
-            </Link>
-          </motion.div> */}
-
 
 <motion.div
       initial={{ y: 20, opacity: 0 }}
@@ -164,7 +84,7 @@ export default function LandingPage() {
       className="flex flex-col items-center gap-4"
     >
       <div className="flex flex-row gap-4">
-        <Link
+        {/* <Link
           href="/try"
           className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
         >
@@ -187,7 +107,7 @@ export default function LandingPage() {
               </svg>
             </motion.span>
           </span>
-        </Link>
+        </Link> */}
 
         <Link
           href="/try"
