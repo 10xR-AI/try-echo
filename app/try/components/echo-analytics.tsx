@@ -579,8 +579,8 @@ const AnalyticsDashboard = () => {
               </td>
               <td className="p-2">{learner.timeSpent} min</td>
               <td className="p-2">
-  {learner.assessmentQuestions.asked + learner.userQuestions.asked}/
-  {learner.assessmentQuestions.correct + learner.userQuestions.answered}
+  {learner.assessmentQuestions.correct + learner.userQuestions.answered}/
+  {learner.assessmentQuestions.asked + learner.userQuestions.asked}
 </td>
               <td className="p-2">{learner.totalScore}%</td>
             </tr>
