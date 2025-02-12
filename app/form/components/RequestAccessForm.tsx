@@ -8,9 +8,17 @@ export default function RequestAccessForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    countryCode: '',
+    phoneNumber: '',
     useCase: '',
+    timeline: '', // New field
     audienceSize: ''
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' })
 
   const useCases = [
     { value: 'corporate-training', label: 'Corporate Training & Development' },
@@ -21,6 +29,15 @@ export default function RequestAccessForm() {
     { value: 'customer-education', label: 'Customer Education & Onboarding' }
   ]
 
+  // New timeline options
+  const timelineOptions = [
+    { value: 'immediate', label: 'As soon as possible (within 1 week)' },
+    { value: 'soon', label: 'Within 2-4 weeks' },
+    { value: 'quarter', label: 'This quarter (within 3 months)' },
+    { value: 'year', label: 'This year' },
+    { value: 'exploring', label: 'Just exploring options' }
+  ]
+
   const audienceSizes = [
     { value: '1-50', label: '1-50 learners' },
     { value: '51-200', label: '51-200 learners' },
@@ -29,38 +46,68 @@ export default function RequestAccessForm() {
     { value: '5000+', label: '5,000+ learners' }
   ]
 
+  const countryCodes = [
+    { value: '+1', label: '+1 (US/Canada)' },
+    { value: '+44', label: '+44 (UK)' },
+    { value: '+91', label: '+91 (India)' },
+    { value: '+61', label: '+61 (Australia)' },
+    { value: '+86', label: '+86 (China)' },
+    { value: '+49', label: '+49 (Germany)' },
+    { value: '+33', label: '+33 (France)' },
+    { value: '+81', label: '+81 (Japan)' },
+  ]
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: '' })
+
     try {
+      const fullPhoneNumber = formData.countryCode + formData.phoneNumber
+      const formDataToSubmit = {
+        ...formData,
+        fullPhoneNumber,
+        submittedAt: new Date().toISOString()
+      }
+
       const response = await fetch('/api/submit-form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
-      });
-  
+        body: JSON.stringify(formDataToSubmit),
+      })
+
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        throw new Error('Failed to submit form')
       }
-  
+
+      setSubmitStatus({
+        type: 'success',
+        message: 'Thank you for your submission! We\'ll be in touch soon.',
+      })
+      
       // Clear form
       setFormData({
         name: '',
         email: '',
+        countryCode: '',
+        phoneNumber: '',
         useCase: '',
+        timeline: '', // Clear new field
         audienceSize: ''
-      });
-      
-      // Optionally show success message
-      alert('Form submitted successfully!');
-      
+      })
     } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to submit form');
+      console.error('Error:', error)
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to submit form. Please try again.',
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
+
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -91,6 +138,19 @@ export default function RequestAccessForm() {
             </p>
           </div>
 
+          {/* Status Message */}
+          {submitStatus.type && (
+            <div
+              className={`mb-6 p-4 rounded-md ${
+                submitStatus.type === 'success'
+                  ? 'bg-green-50 text-green-800'
+                  : 'bg-red-50 text-red-800'
+              }`}
+            >
+              {submitStatus.message}
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
             {/* Name Field */}
@@ -107,6 +167,7 @@ export default function RequestAccessForm() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors"
                 placeholder="Enter your full name"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -124,7 +185,44 @@ export default function RequestAccessForm() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors"
                 placeholder="Enter your work email"
+                disabled={isSubmitting}
               />
+            </div>
+
+            {/* Phone Number Field */}
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
+              <div className="flex gap-3">
+                <select
+                  id="countryCode"
+                  name="countryCode"
+                  required
+                  value={formData.countryCode}
+                  onChange={handleChange}
+                  className="w-1/3 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors bg-white"
+                  disabled={isSubmitting}
+                >
+                  <option value="">Code</option>
+                  {countryCodes.map(code => (
+                    <option key={code.value} value={code.value}>
+                      {code.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  required
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="w-2/3 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors"
+                  placeholder="Enter your phone number"
+                  disabled={isSubmitting}
+                />
+              </div>
             </div>
 
             {/* Use Case Dropdown */}
@@ -139,11 +237,35 @@ export default function RequestAccessForm() {
                 value={formData.useCase}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors bg-white"
+                disabled={isSubmitting}
               >
                 <option value="">Select your primary use case</option>
                 {useCases.map(useCase => (
                   <option key={useCase.value} value={useCase.value}>
                     {useCase.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Timeline Dropdown - New Field */}
+            <div>
+              <label htmlFor="timeline" className="block text-sm font-medium text-gray-700 mb-2">
+                How soon do you need this?
+              </label>
+              <select
+                id="timeline"
+                name="timeline"
+                required
+                value={formData.timeline}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors bg-white"
+                disabled={isSubmitting}
+              >
+                <option value="">Select your timeline</option>
+                {timelineOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -161,6 +283,7 @@ export default function RequestAccessForm() {
                 value={formData.audienceSize}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors bg-white"
+                disabled={isSubmitting}
               >
                 <option value="">Select your audience size</option>
                 {audienceSizes.map(size => (
@@ -174,25 +297,27 @@ export default function RequestAccessForm() {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-[#559EFF] to-[#1065BA] text-white font-semibold py-3 px-6 rounded-md hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:ring-offset-2"
+              disabled={isSubmitting}
+              whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+              className={`w-full bg-gradient-to-r from-[#559EFF] to-[#1065BA] text-white font-semibold py-3 px-6 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:ring-offset-2 ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-90'
+              }`}
             >
-              Submit Request
+              {isSubmitting ? 'Submitting...' : 'Submit Request'}
             </motion.button>
           </form>
-<Link href="/">
-          {/* Back Link */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center mt-6"
-          >
-            
-              ← Back to home
 
-          </motion.div>
+          {/* Back Link */}
+          <Link href="/">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-center mt-6"
+            >
+              ← Back to home
+            </motion.div>
           </Link>
         </motion.div>
       </div>
