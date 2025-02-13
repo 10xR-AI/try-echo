@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FFFFFF] to-[#F8FBFF] text-[#000D20]">
+    <main className="bg-gradient-to-b from-[#FFFFFF] to-[#F8FBFF] text-[#000D20]">
       <div className="container mx-auto px-4 py-8 md:py-16">
         <div className="flex flex-col items-center text-center">
           {/* Animated Logo */}
