@@ -84,7 +84,7 @@ export default function LandingPage() {
             className="flex flex-col sm:flex-row items-center gap-4"
           >
             <Link
-              href="/try"
+              href="https://qa.10xr.co/public/agents?agentContextId=10xr-echo-intro-agent-v1&prospectName=Visitor&prospectEmail=info@10xr.co"
               className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] p-[1px] transition-all hover:scale-105"
             >
               <span className="relative inline-flex items-center justify-center rounded-md bg-gradient-to-r from-[#559EFF] to-[#1065BA] px-8 py-3 text-lg font-semibold text-white transition-all duration-300 ease-out group-hover:bg-opacity-90">

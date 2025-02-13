@@ -3,16 +3,40 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons"
+
+
+
+interface UnifiedFormData {
+  // Common fields from both forms
+  name: string;
+  email: string;
+  phoneNumber: string; // Combined mobile/phone
+  countryCode: string;
+  
+  // Fields from RequestAccessForm
+  useCase: string;
+  timeline: string;
+  audienceSize: string;
+  
+  // Fields from FeedbackDialog
+  rating: number;
+  feedback: string;
+}
+
+
 
 export default function RequestAccessForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UnifiedFormData>({
     name: '',
     email: '',
     countryCode: '',
     phoneNumber: '',
     useCase: '',
-    timeline: '', // New field
-    audienceSize: ''
+    timeline: '',
+    audienceSize: '',
+    rating: 0,
+    feedback: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<{
@@ -94,8 +118,10 @@ export default function RequestAccessForm() {
         countryCode: '',
         phoneNumber: '',
         useCase: '',
-        timeline: '', // Clear new field
-        audienceSize: ''
+        timeline: '',
+        audienceSize: '',
+        rating: 0,
+        feedback: ''
       })
     } catch (error) {
       console.error('Error:', error)
@@ -292,6 +318,43 @@ export default function RequestAccessForm() {
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                How would you rate your interest?
+              </label>
+              <div className="flex space-x-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
+                    className="focus:outline-none"
+                  >
+                    {star <= formData.rating ? (
+                      <StarFilledIcon className="w-8 h-8 text-yellow-400" />
+                    ) : (
+                      <StarIcon className="w-8 h-8 text-gray-300" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* New Feedback Field */}
+            <div>
+              <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-2">
+                Additional Comments
+              </label>
+              <textarea
+                id="feedback"
+                name="feedback"
+                value={formData.feedback}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#559EFF] focus:border-transparent transition-colors"
+                placeholder="Share any additional information or requirements..."
+                rows={4}
+              />
             </div>
 
             {/* Submit Button */}

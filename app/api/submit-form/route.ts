@@ -25,8 +25,10 @@ export async function POST(req: Request) {
       phoneNumber, 
       useCase, 
       timeline,
-      audienceSize, 
-      submittedAt 
+      audienceSize,
+      rating,
+      feedback, 
+      submittedAt
     } = body;
 
     // Combine country code and phone number
@@ -58,6 +60,15 @@ export async function POST(req: Request) {
       'exploring': 'Just exploring options'
     };
 
+    // Map the audience size to its label
+    const audienceSizeMap: { [key: string]: string } = {
+      '1-50': '1-50 learners',
+      '51-200': '51-200 learners',
+      '201-1000': '201-1,000 learners',
+      '1001-5000': '1,001-5,000 learners',
+      '5000+': '5,000+ learners'
+    };
+
     // Format date for better readability in sheets
     const formattedDate = new Date(submittedAt).toLocaleString('en-US', {
       timeZone: 'UTC',
@@ -73,8 +84,8 @@ export async function POST(req: Request) {
     await sheets.spreadsheets.values.append({
       auth,
       spreadsheetId,
-      // Specify the range where data should be inserted
-      range: 'Sheet1!A:H',
+      // Specify the range where data should be inserted (updated to include new fields)
+      range: 'Sheet1!A:K',
       // How the input data should be interpreted
       valueInputOption: 'USER_ENTERED',
       // The new values to append
@@ -85,9 +96,12 @@ export async function POST(req: Request) {
           fullPhoneNumber,                // Column C: Phone Number
           useCaseMap[useCase] || useCase, // Column D: Use Case (mapped to label)
           timelineMap[timeline] || timeline, // Column E: Timeline (mapped to label)
-          audienceSize,                   // Column F: Audience Size
-          formattedDate,                  // Column G: Submission Timestamp
-          'New'                           // Column H: Status (default to New)
+          audienceSizeMap[audienceSize] || audienceSize, // Column F: Audience Size
+          rating || 0,                    // Column G: Rating
+          feedback || '',                 // Column H: Feedback
+          formattedDate,                  // Column I: Submission Timestamp
+          'New',                          // Column J: Status (default to New)
+          'RequestAccessForm'             // Column K: Form Source
         ]],
       },
     });
