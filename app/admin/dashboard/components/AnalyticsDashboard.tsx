@@ -58,14 +58,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
   };
   
   const slideEngagement: SlideEngagement[] = [
-    { slideNumber: 1, thumbnail: '/api/placeholder/120/80', engagementScore: 85, timeSpent: 125 },
-    { slideNumber: 2, thumbnail: '/api/placeholder/120/80', engagementScore: 92, timeSpent: 180 },
-    { slideNumber: 3, thumbnail: '/api/placeholder/120/80', engagementScore: 75, timeSpent: 90 },
-    { slideNumber: 4, thumbnail: '/api/placeholder/120/80', engagementScore: 88, timeSpent: 140 },
-    { slideNumber: 5, thumbnail: '/api/placeholder/120/80', engagementScore: 78, timeSpent: 110 },
-    { slideNumber: 6, thumbnail: '/api/placeholder/120/80', engagementScore: 92, timeSpent: 160 },
-    { slideNumber: 7, thumbnail: '/api/placeholder/120/80', engagementScore: 83, timeSpent: 120 },
-    { slideNumber: 8, thumbnail: '/api/placeholder/120/80', engagementScore: 80, timeSpent: 135 },
+    { slideNumber: 1, thumbnail: '/slides/image1.png', engagementScore: 85, timeSpent: 125 },
+    { slideNumber: 2, thumbnail: '/slides/image2.png', engagementScore: 92, timeSpent: 180 },
+    { slideNumber: 3, thumbnail: '/slides/image3.png', engagementScore: 75, timeSpent: 90 },
+    { slideNumber: 4, thumbnail: '/slides/image4.png', engagementScore: 88, timeSpent: 140 },
+    { slideNumber: 5, thumbnail: '/slides/image5.png', engagementScore: 78, timeSpent: 110 },
+    { slideNumber: 6, thumbnail: '/slides/image6.png', engagementScore: 92, timeSpent: 160 },
+    { slideNumber: 7, thumbnail: '/slides/image7.png', engagementScore: 83, timeSpent: 120 },
+    { slideNumber: 8, thumbnail: '/slides/image8.png', engagementScore: 80, timeSpent: 135 },
     // { slideNumber: 9, thumbnail: '/api/placeholder/120/80', engagementScore: 85, timeSpent: 130 },
     // { slideNumber: 10, thumbnail: '/api/placeholder/120/80', engagementScore: 90, timeSpent: 150 }
   ];
@@ -274,12 +274,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
     });
   };
 
-  const getEngagementColor = (score: number): string => {
-    if (score >= 80) return 'bg-red-500';
-    if (score >= 60) return 'bg-orange-500';
-    if (score >= 40) return 'bg-yellow-500';
-    return 'bg-blue-500';
-  };
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -351,10 +345,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
                     <img
                       src={slide.thumbnail}
                       alt={`Slide ${slide.slideNumber}`}
-                      className="w-20 h-40 rounded-lg"
+                      className="w-50 h-40 rounded-lg"
                     />
                     <div
-                      className={`absolute inset-0 ${getEngagementColor(slide.engagementScore)} opacity-40 rounded-lg`}
+                      className={`absolute inset-0  opacity-40 rounded-lg`}
                     />
                     <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
                       {formatTime(slide.timeSpent)}
