@@ -1,14 +1,11 @@
-// components/admin/ReviewTest.tsx
-'use client';
-
 import React, { useState } from 'react';
-import { Mail, ArrowLeft, Send, Play, FileText, Users, Video, PlayCircle,  Copy } from 'lucide-react';
+import { Mail, ArrowLeft,  Play, FileText, Users, Video, PlayCircle, Copy, Plus, X } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-
+import { useCampaignStore } from '@/store/CampaignStore';
 interface ReviewTestProps {
   onBack: () => void;
   onLaunch: () => void;
-  isLaunching:boolean;
+  isLaunching: boolean;
   campaignData: {
     prospects: number;
     slides: number;
@@ -18,20 +15,30 @@ interface ReviewTestProps {
   };
 }
 
-
+interface EmailTemplate {
+  subject: string;
+  body: string;
+}
 
 const ReviewTest: React.FC<ReviewTestProps> = ({
   onBack,
   onLaunch,
   campaignData,
-  
 }) => {
-  const [testEmail, setTestEmail] = useState('');
+  const [testEmails, setTestEmails] = useState<string[]>(['']);
   const [sendingTest, setSendingTest] = useState(false);
   const [testSent, setTestSent] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<string[]>([]);
   const [previewLink, setPreviewLink] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [emailTemplate, setEmailTemplate] = useState<EmailTemplate>({
+    subject: 'Personalized Introduction from [Your Name]',
+    body: `Hi [Prospect Name],
+
+I noticed you're involved with [Company] and thought you might be interested in learning how we've helped similar organizations improve their [Value Proposition].
+
+I've prepared some materials that showcase our approach and results. Would you be open to a brief discussion?`
+  });
 
   const generatePreview = () => {
     setIsProcessing(true);
@@ -50,27 +57,59 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
     }
   };
 
-  const handleSendTest = async () => {
-    if (!testEmail) {
-      setError('Please enter an email address');
-      return;
+  const handleEmailChange = (index: number, value: string) => {
+    const newEmails = [...testEmails];
+    newEmails[index] = value;
+    setTestEmails(newEmails);
+    
+    // Clear error for this index if exists
+    if (errors[index]) {
+      const newErrors = [...errors];
+      newErrors[index] = '';
+      setErrors(newErrors);
     }
+  };
 
-    if (!testEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError('Please enter a valid email address');
-      return;
-    }
+  const addEmailField = () => {
+    setTestEmails([...testEmails, '']);
+    setErrors([...errors, '']);
+  };
+
+  const removeEmailField = (index: number) => {
+    const newEmails = testEmails.filter((_, i) => i !== index);
+    const newErrors = errors.filter((_, i) => i !== index);
+    setTestEmails(newEmails);
+    setErrors(newErrors);
+  };
+
+  const validateEmails = () => {
+    const newErrors = testEmails.map(email => {
+      if (!email) return 'Please enter an email address';
+      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return 'Please enter a valid email address';
+      return '';
+    });
+    setErrors(newErrors);
+    return newErrors.every(error => !error);
+  };
+
+  const setStoreTestEmails = useCampaignStore(state => state.setTestEmails);
+
+  const handleSendTest = async () => {
+    if (!validateEmails()) return;
 
     setSendingTest(true);
-    setError('');
+    setErrors([]);
 
     try {
+      // Store the test emails in the global store
+      setStoreTestEmails(testEmails.filter(email => email.trim() !== ''));
+      
       // Simulate API call for sending test email
       await new Promise(resolve => setTimeout(resolve, 1500));
       setTestSent(true);
       setTimeout(() => setTestSent(false), 3000);
     } catch {
-      setError('Failed to send test email. Please try again.');
+      setErrors(['Failed to send tests emails. Please try again.']);
     } finally {
       setSendingTest(false);
     }
@@ -78,6 +117,7 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {/* Rest of the cards remain the same until Test Email Section */}
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">Review & Test Campaign</h2>
 
@@ -137,7 +177,7 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
           </Card>
         </div>
 
-
+        {/* Preview Card */}
         <Card>
           <CardHeader>
             <CardTitle>Preview Presentation</CardTitle>
@@ -181,8 +221,6 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
           </CardContent>
         </Card>
 
-
-
         {/* Test Email Section */}
         <Card>
           <CardHeader>
@@ -193,34 +231,54 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="flex gap-4">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={testEmail}
-                  onChange={(e) => setTestEmail(e.target.value)}
-                  className="flex-1 p-2 border rounded-lg"
-                />
+              {testEmails.map((email, index) => (
+                <div key={index} className="flex gap-4">
+                  <input
+                    type="email"
+                    placeholder="Enter email address"
+                    value={email}
+                    onChange={(e) => handleEmailChange(index, e.target.value)}
+                    className="flex-1 p-2 border rounded-lg"
+                  />
+                  {testEmails.length > 1 && (
+                    <button
+                      onClick={() => removeEmailField(index)}
+                      className="p-2 text-red-500 hover:text-red-600"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  )}
+                  {errors[index] && (
+                    <p className="text-red-500 text-sm">{errors[index]}</p>
+                  )}
+                </div>
+              ))}
+              
+              <div className="flex justify-between">
+                <button
+                  onClick={addEmailField}
+                  className="text-blue-500 hover:text-blue-600 flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Another Test Email
+                </button>
+                
                 <button
                   onClick={handleSendTest}
                   disabled={sendingTest}
                   className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  <Send className="h-4 w-4" />
-                  {sendingTest ? 'Sending...' : 'Send Test'}
+                  {/* <Send className="h-4 w-4" /> */}
+                  {sendingTest ? 'Sending...' : 'Sending Template'}
                 </button>
               </div>
-
-              {error && (
-                <p>{error}</p>
-              )}
-
-              {testSent && (
-                <p>Test email sent Successfully</p>
-              )}
             </div>
 
-            {/* Email Preview */}
+            {testSent && (
+              <p className="text-green-500">Test Email template sents successfully</p>
+            )}
+
+            {/* Email Preview with Editable Content */}
             <div className="border rounded-lg p-4 space-y-4">
               <div className="flex items-start gap-4">
                 {campaignData.avatarImage && (
@@ -231,18 +289,19 @@ const ReviewTest: React.FC<ReviewTestProps> = ({
                   />
                 )}
                 <div className="flex-1">
-                  <h3 className="font-medium">Subject: Personalized Introduction from [Your Name]</h3>
-                  <div className="mt-4 text-gray-600">
-                    <p>Hi [Prospect Name],</p>
-                    <p className="mt-2">
-                      I noticed you&apos;re involved with [Company] and thought you might be interested
-                      in learning how we&apos;ve helped similar organizations improve their [Value Proposition].
-                    </p>
-                    <p className="mt-2">
-                      I&apos;ve prepared some materials that showcase our approach and results.
-                      Would you be open to a brief discussion?
-                    </p>
-                  </div>
+                  <input
+                    type="text"
+                    value={emailTemplate.subject}
+                    onChange={(e) => setEmailTemplate({...emailTemplate, subject: e.target.value})}
+                    className="w-full p-2 border rounded mb-4 font-medium"
+                    placeholder="Email subject"
+                  />
+                  <textarea
+                    value={emailTemplate.body}
+                    onChange={(e) => setEmailTemplate({...emailTemplate, body: e.target.value})}
+                    className="w-full p-2 border rounded min-h-[200px]"
+                    placeholder="Email body"
+                  />
                 </div>
               </div>
             </div>

@@ -1,4 +1,3 @@
-// components/admin/AnalyticsDashboard.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -13,7 +12,9 @@ interface Prospect {
   id: string;
   name: string;
   company: string;
-  timeSpent: number;
+  totalTimeSpent: number;
+  frequency: number;
+  avgTimePerVisit: number;
   questionsAsked: number;
   leadScore: number;
   lastActive: string;
@@ -40,7 +41,7 @@ interface AnalyticsDashboardProps {
 
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
   const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null);
-  const [sortField, setSortField] = useState<'timeSpent' | 'questionsAsked' | 'leadScore'>('leadScore');
+  const [sortField, setSortField] = useState<'totalTimeSpent' | 'questionsAsked' | 'leadScore' | 'avgTimePerVisit' | 'frequency'>('leadScore');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [isReplayPlaying, setIsReplayPlaying] = useState(false);
 
@@ -51,7 +52,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
     meetingsBooked: 12,
     topProspect: {
       name: 'John Doe',
-      timeSpent: '12 mins'
+      timeSpent: '12 mins',
+      frequency : '18'
     }
   };
   
@@ -73,140 +75,160 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
       id: '1',
       name: 'John Doe',
       company: 'Tech Corp',
-      timeSpent: 720,
-      questionsAsked: 8,
+      totalTimeSpent: 720,
+      frequency: 8,
+      avgTimePerVisit: 90,
+      questionsAsked: 12,
       leadScore: 85,
       lastActive: '2 hours ago',
       sessions: [
         { timestamp: '10:00 AM', action: 'Viewed slide 1' },
         { timestamp: '10:02 AM', action: 'Asked about pricing', question: 'What is the enterprise pricing?' },
-        { timestamp: '10:05 AM', action: 'Skipped to slide 7' },
+        { timestamp: '10:05 AM', action: 'Skipped to slide 7' }
       ]
     },
     {
       id: '2',
       name: 'Jane Smith',
       company: 'Innovate LLC',
-      timeSpent: 540,
-      questionsAsked: 7,
-      leadScore: 80,
+      totalTimeSpent: 840,
+      frequency: 12,
+      avgTimePerVisit: 70,
+      questionsAsked: 15,
+      leadScore: 92,
       lastActive: '1 hour ago',
       sessions: [
         { timestamp: '9:30 AM', action: 'Viewed slide 2' },
         { timestamp: '9:35 AM', action: 'Asked about support', question: 'How is customer support handled?' },
-        { timestamp: '9:40 AM', action: 'Skipped to slide 5' },
+        { timestamp: '9:40 AM', action: 'Skipped to slide 5' }
       ]
     },
     {
       id: '3',
       name: 'Alex Johnson',
       company: 'FutureTech',
-      timeSpent: 600,
-      questionsAsked: 6,
-      leadScore: 88,
+      totalTimeSpent: 600,
+      frequency: 6,
+      avgTimePerVisit: 100,
+      questionsAsked: 8,
+      leadScore: 78,
       lastActive: '3 hours ago',
       sessions: [
         { timestamp: '8:00 AM', action: 'Viewed slide 3' },
         { timestamp: '8:05 AM', action: 'Asked about integration', question: 'How does it integrate with existing systems?' },
-        { timestamp: '8:10 AM', action: 'Skipped to slide 8' },
+        { timestamp: '8:10 AM', action: 'Skipped to slide 8' }
       ]
     },
     {
       id: '4',
       name: 'Sara Lee',
       company: 'Tech Dynamics',
-      timeSpent: 650,
-      questionsAsked: 9,
-      leadScore: 90,
+      totalTimeSpent: 960,
+      frequency: 15,
+      avgTimePerVisit: 64,
+      questionsAsked: 18,
+      leadScore: 95,
       lastActive: '30 minutes ago',
       sessions: [
         { timestamp: '11:00 AM', action: 'Viewed slide 4' },
         { timestamp: '11:05 AM', action: 'Asked about security', question: 'What security features are available?' },
-        { timestamp: '11:10 AM', action: 'Skipped to slide 9' },
+        { timestamp: '11:10 AM', action: 'Skipped to slide 9' }
       ]
     },
     {
       id: '5',
       name: 'Michael Brown',
       company: 'Solutions Co.',
-      timeSpent: 720,
-      questionsAsked: 5,
-      leadScore: 75,
+      totalTimeSpent: 480,
+      frequency: 5,
+      avgTimePerVisit: 96,
+      questionsAsked: 6,
+      leadScore: 72,
       lastActive: '4 hours ago',
       sessions: [
         { timestamp: '12:00 PM', action: 'Viewed slide 1' },
         { timestamp: '12:10 PM', action: 'Asked about pricing', question: 'What is the cost of the basic package?' },
-        { timestamp: '12:15 PM', action: 'Skipped to slide 6' },
+        { timestamp: '12:15 PM', action: 'Skipped to slide 6' }
       ]
     },
     {
       id: '6',
       name: 'Emily Davis',
       company: 'Edge Solutions',
-      timeSpent: 550,
-      questionsAsked: 6,
-      leadScore: 82,
+      totalTimeSpent: 720,
+      frequency: 9,
+      avgTimePerVisit: 80,
+      questionsAsked: 11,
+      leadScore: 88,
       lastActive: '1 hour ago',
       sessions: [
         { timestamp: '10:30 AM', action: 'Viewed slide 2' },
         { timestamp: '10:35 AM', action: 'Asked about integration', question: 'How does it integrate with Salesforce?' },
-        { timestamp: '10:40 AM', action: 'Skipped to slide 4' },
+        { timestamp: '10:40 AM', action: 'Skipped to slide 4' }
       ]
     },
     {
       id: '7',
       name: 'William Harris',
       company: 'Global Systems',
-      timeSpent: 600,
-      questionsAsked: 10,
-      leadScore: 92,
+      totalTimeSpent: 1080,
+      frequency: 18,
+      avgTimePerVisit: 60,
+      questionsAsked: 22,
+      leadScore: 98,
       lastActive: '45 minutes ago',
       sessions: [
         { timestamp: '9:00 AM', action: 'Viewed slide 3' },
         { timestamp: '9:05 AM', action: 'Asked about security', question: 'What encryption methods are used?' },
-        { timestamp: '9:10 AM', action: 'Skipped to slide 7' },
+        { timestamp: '9:10 AM', action: 'Skipped to slide 7' }
       ]
     },
     {
       id: '8',
       name: 'Olivia Wilson',
       company: 'Visionary Corp',
-      timeSpent: 530,
-      questionsAsked: 4,
-      leadScore: 78,
+      totalTimeSpent: 540,
+      frequency: 7,
+      avgTimePerVisit: 77,
+      questionsAsked: 9,
+      leadScore: 76,
       lastActive: '2 hours ago',
       sessions: [
         { timestamp: '11:30 AM', action: 'Viewed slide 1' },
         { timestamp: '11:35 AM', action: 'Asked about support', question: 'What kind of customer support is available?' },
-        { timestamp: '11:40 AM', action: 'Skipped to slide 6' },
+        { timestamp: '11:40 AM', action: 'Skipped to slide 6' }
       ]
     },
     {
       id: '9',
       name: 'David Martinez',
       company: 'Tech Systems',
-      timeSpent: 670,
-      questionsAsked: 6,
-      leadScore: 85,
+      totalTimeSpent: 660,
+      frequency: 11,
+      avgTimePerVisit: 60,
+      questionsAsked: 14,
+      leadScore: 86,
       lastActive: '1 hour ago',
       sessions: [
         { timestamp: '10:00 AM', action: 'Viewed slide 4' },
         { timestamp: '10:05 AM', action: 'Asked about pricing', question: 'What are the subscription tiers?' },
-        { timestamp: '10:10 AM', action: 'Skipped to slide 9' },
+        { timestamp: '10:10 AM', action: 'Skipped to slide 9' }
       ]
     },
     {
       id: '10',
       name: 'Charlotte Moore',
       company: 'Innovate Ltd.',
-      timeSpent: 680,
-      questionsAsked: 7,
-      leadScore: 88,
+      totalTimeSpent: 900,
+      frequency: 14,
+      avgTimePerVisit: 64,
+      questionsAsked: 16,
+      leadScore: 90,
       lastActive: '30 minutes ago',
       sessions: [
         { timestamp: '12:00 PM', action: 'Viewed slide 8' },
         { timestamp: '12:05 PM', action: 'Asked about security', question: 'How is data protected?' },
-        { timestamp: '12:10 PM', action: 'Skipped to slide 5' },
+        { timestamp: '12:10 PM', action: 'Skipped to slide 5' }
       ]
     }
   ];
@@ -225,20 +247,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
   ];
   
   // Derived metrics based on the expanded data
-  const averageLeadScore = (prospects.reduce((total, p) => total + p.leadScore, 0) / prospects.length).toFixed(2);
-  const totalQuestionsAsked = questions.reduce((total, q) => total + q.count, 0);
-  const avgQuestionsAsked = (totalQuestionsAsked / prospects.length).toFixed(2);
-  const totalTimeSpent = prospects.reduce((total, p) => total + p.timeSpent, 0);
-  const avgTimeSpent = (totalTimeSpent / prospects.length).toFixed(2);
   
-  const derivedMetrics = {
-    averageLeadScore,
-    totalQuestionsAsked,
-    avgQuestionsAsked,
-    avgTimeSpent: `${(Number(avgTimeSpent) / 60).toFixed(2)} mins`
-  };
   
-  console.log(derivedMetrics);
+  
+  // console.log(derivedMetrics);
   
 
   const formatTime = (seconds: number): string => {
@@ -246,7 +258,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
     return `${minutes} mins`;
   };
 
-  const handleSort = (field: 'timeSpent' | 'questionsAsked' | 'leadScore') => {
+  const handleSort = (field: 'frequency' | 'avgTimePerVisit' | 'totalTimeSpent' | 'questionsAsked' | 'leadScore') => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -319,6 +331,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
           <CardContent>
             <p className="text-2xl font-bold">{metrics.topProspect.name}</p>
             <p className="text-sm text-gray-500">{metrics.topProspect.timeSpent}</p>
+            <p className="text-sm text-gray-500">{metrics.topProspect.frequency} times</p>
           </CardContent>
         </Card>
       </div>
@@ -353,67 +366,86 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
           </Card>
 
           {/* Prospect Leaderboard */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Prospect Leaderboard</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-2">Prospect</th>
-                      <th className="cursor-pointer" onClick={() => handleSort('timeSpent')}>
-                        <div className="flex items-center gap-1">
-                          Time Spent
-                          {sortField === 'timeSpent' && (
-                            sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                          )}
-                        </div>
-                      </th>
-                      <th className="cursor-pointer" onClick={() => handleSort('questionsAsked')}>
-                        <div className="flex items-center gap-1">
-                          Questions
-                          {sortField === 'questionsAsked' && (
-                            sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                          )}
-                        </div>
-                      </th>
-                      <th className="cursor-pointer" onClick={() => handleSort('leadScore')}>
-                        <div className="flex items-center gap-1">
-                          Lead Score
-                          {sortField === 'leadScore' && (
-                            sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                          )}
-                        </div>
-                      </th>
-                      <th>Last Active</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {getSortedProspects().map((prospect) => (
-                      <tr
-                        key={prospect.id}
-                        className="border-b cursor-pointer hover:bg-gray-50"
-                        onClick={() => setSelectedProspect(prospect)}
-                      >
-                        <td className="py-2">
-                          <div>
-                            <p className="font-medium">{prospect.name}</p>
-                            <p className="text-sm text-gray-500">{prospect.company}</p>
-                          </div>
-                        </td>
-                        <td>{formatTime(prospect.timeSpent)}</td>
-                        <td>{prospect.questionsAsked}</td>
-                        <td>{prospect.leadScore}</td>
-                        <td>{prospect.lastActive}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Prospect Leaderboard</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-2">Prospect</th>
+                  <th className="cursor-pointer" onClick={() => handleSort('frequency')}>
+                    <div className="flex items-center gap-1">
+                      Frequency
+                      {sortField === 'frequency' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="cursor-pointer" onClick={() => handleSort('avgTimePerVisit')}>
+                    <div className="flex items-center gap-1">
+                      Avg Time/Visit
+                      {sortField === 'avgTimePerVisit' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="cursor-pointer" onClick={() => handleSort('totalTimeSpent')}>
+                    <div className="flex items-center gap-1">
+                      Total Time
+                      {sortField === 'totalTimeSpent' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="cursor-pointer" onClick={() => handleSort('questionsAsked')}>
+                    <div className="flex items-center gap-1">
+                      Questions
+                      {sortField === 'questionsAsked' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th className="cursor-pointer" onClick={() => handleSort('leadScore')}>
+                    <div className="flex items-center gap-1">
+                      Lead Score
+                      {sortField === 'leadScore' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                  <th>Last Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getSortedProspects().map((prospect) => (
+                  <tr
+                    key={prospect.id}
+                    className="border-b cursor-pointer hover:bg-gray-50"
+                    onClick={() => setSelectedProspect(prospect)}
+                  >
+                    <td className="py-2">
+                      <div>
+                        <p className="font-medium">{prospect.name}</p>
+                        <p className="text-sm text-gray-500">{prospect.company}</p>
+                      </div>
+                    </td>
+                    <td>{prospect.frequency}</td>
+                    <td>{formatTime(prospect.avgTimePerVisit)}</td>
+                    <td>{formatTime(prospect.totalTimeSpent)}</td>
+                    <td>{prospect.questionsAsked}</td>
+                    <td>{prospect.leadScore}</td>
+                    <td>{prospect.lastActive}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
         </div>
 
         {/* Right Column - Questions and Session Replay */}
@@ -443,7 +475,64 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({  }) => {
               </button>
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Topics Users are Interested In</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { topic: 'Cloud Integration', interest: 85 },
+                  { topic: 'Data Security', interest: 92 },
+                  { topic: 'API Documentation', interest: 78 },
+                  { topic: 'Automated Testing', interest: 65 },
+                  { topic: 'Custom Workflows', interest: 71 }
+                ].map((item) => (
+                  <div key={item.topic} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{item.topic}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-blue-500 rounded-full"
+                          style={{ width: `${item.interest}%` }}
+                        />
+                      </div>
+                      <span className="text-sm text-gray-500">{item.interest}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
+          {/* Missing Topics */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Topics Missing in Your Slides</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { topic: 'Mobile App Integration', relevance: 'High' },
+                  { topic: 'Cost Optimization', relevance: 'High' },
+                  { topic: 'Compliance Standards', relevance: 'Medium' },
+                  { topic: 'Third-party Integrations', relevance: 'Medium' },
+                  { topic: 'Performance Metrics', relevance: 'High' }
+                ].map((item) => (
+                  <div key={item.topic} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{item.topic}</span>
+                    <span className={`text-sm px-2 py-1 rounded-full ${
+                      item.relevance === 'High' 
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-orange-100 text-orange-800'
+                    }`}>
+                      {item.relevance} Priority
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
           {/* Session Replay */}
           {selectedProspect && (
             <Card>

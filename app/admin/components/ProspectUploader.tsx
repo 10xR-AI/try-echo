@@ -1,5 +1,8 @@
 import React, { useState, ChangeEvent, DragEvent } from 'react';
-import { Upload, Database, Grid } from 'lucide-react';
+import { Upload} from 'lucide-react';
+import SalesForce from '../icons/SalesForce';
+import GoogleSheets from '../icons/GoogleSheets';
+import HubSpot from '../icons/HubSpot';
 
 interface Prospect {
   [key: string]: string;
@@ -74,9 +77,9 @@ const ProspectUploader: React.FC<ProspectUploaderProps> = ({ onNext }) => {
   };
 
   const integrationOptions = [
-    { name: 'Salesforce', icon: <Database className="w-12 h-12 text-blue-500" /> },
-    { name: 'Google Workspace', icon: <Grid className="w-12 h-12 text-green-500" /> },
-    { name: 'HubSpot', icon: <Upload className="w-12 h-12 text-orange-500" /> },
+    { name: 'Salesforce', icon: <SalesForce/> },
+    { name: 'Google Workspace', icon: <GoogleSheets/> },
+    { name: 'HubSpot', icon: <HubSpot/> },
   ];
 
   return (
@@ -85,9 +88,9 @@ const ProspectUploader: React.FC<ProspectUploaderProps> = ({ onNext }) => {
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-4">Import Prospects</h2>
           
-          <div className="grid grid-cols-2 gap-8">
-            {/* Left side - CSV Upload */}
-            <div>
+          <div className="grid grid-cols-3 gap-8">
+            {/* Left side - CSV Upload (2/3 width) */}
+            <div className="col-span-2">
               <h3 className="text-lg font-semibold mb-3">Upload CSV File</h3>
               <div
                 className={`border-2 border-dashed rounded-lg p-8 text-center h-64 flex items-center justify-center ${
@@ -121,18 +124,18 @@ const ProspectUploader: React.FC<ProspectUploaderProps> = ({ onNext }) => {
               </div>
             </div>
 
-            {/* Right side - Integrations */}
+            {/* Right side - Integrations (1/3 width) */}
             <div>
               <h3 className="text-lg font-semibold mb-3">Connect Platform</h3>
-              <div className="border-2 rounded-lg p-6 h-70 flex flex-col justify-center">
-                <div className="grid grid-cols-1 gap-3">
+              <div className="border rounded-lg p-3">
+                <div className="space-y-2">
                   {integrationOptions.map((option, index) => (
                     <button
                       key={index}
-                      className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center w-full space-x-2 p-2 border rounded hover:bg-gray-50 transition-colors"
                     >
                       {option.icon}
-                      <span className="text-lg font-medium">{option.name}</span>
+                      <span className="text-sm">{option.name}</span>
                     </button>
                   ))}
                 </div>

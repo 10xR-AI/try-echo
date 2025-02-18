@@ -2,90 +2,16 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import AdminLogin from './components/AdminLogin';
-import ProspectUploader from './components/ProspectUploader';
-import ContentUploader from './components/ContentUploader';
-import MediaIntegrations from './components/MediaIntegration';
-import ReviewTest from './components/ReviewTest';
-import AnalyticsDashboard from './components/AnalyticsDashboard';
-
-
-interface CampaignData {
-  prospects: number;
-  slides: number;
-  caseStudies: number;
-  avatarImage?: string;
-  audioBlob?: Blob;
-};
+import { PlusCircle, BarChart3 } from 'lucide-react';
 
 const AdminPage: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [campaignData] = useState<CampaignData>({
-    prospects: 25,
-    slides: 15,
-    caseStudies: 3,
-    avatarImage: '',
-    audioBlob: undefined  // Changed from null to undefined to match the type
-  });
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [campaignId, setCampaignId] = useState<string>('');
-  const [isLaunching, setIsLaunching] = useState<boolean>(false);
-  
+  const router = useRouter();
 
   const handleLogin = (success: boolean): void => {
     setIsAuthenticated(success);
-  };
-  const handleNext = (): void => {
-    setCurrentStep(prev => prev + 1);
-  };
-
-  const handleLaunchCampaign = async () => {
-    setIsLaunching(true);
-    try {
-      // Simulate API call to launch campaign
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Generate a mock campaign ID
-      const newCampaignId = `CAMP-${Math.random().toString(36).substr(2, 9)}`;
-      setCampaignId(newCampaignId);
-      
-      // Move to analytics dashboard
-      setCurrentStep(5);
-    } catch (error) {
-      console.error('Error launching campaign:', error);
-      // Handle error state if needed
-    } finally {
-      setIsLaunching(false);
-    }
-  };
-
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <ProspectUploader onNext={handleNext} />;
-      case 2:
-        return (
-          <ContentUploader 
-            onObjectiveChange={() => {}} 
-            onNext={handleNext} 
-          />
-        );
-      case 3:
-        return <MediaIntegrations onNext={handleNext} />;
-      case 4:
-        return (
-          <ReviewTest
-            onBack={() => setCurrentStep(prev => prev - 1)}
-            onLaunch={handleLaunchCampaign}
-            campaignData={campaignData}
-            isLaunching={isLaunching}
-          />
-        );
-      case 5:
-        return <AnalyticsDashboard campaignId={campaignId} />;
-      default:
-        return null;
-    }
   };
 
   if (!isAuthenticated) {
@@ -93,43 +19,37 @@ const AdminPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Progress Indicator */}
-      {currentStep < 5 && (
-        <div className="w-full bg-white border-b px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-4">
-              {['Prospects', 'Content', 'Media', 'Review','Dashboard'].map((step, index) => (
-                <React.Fragment key={step}>
-                  {index > 0 && <div className="h-px w-8 bg-gray-300" />}
-                  <div
-                    className={`flex items-center space-x-2 ${
-                      index + 1 === currentStep ? 'text-blue-600' : 'text-gray-500'
-                    }`}
-                  >
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        index + 1 === currentStep
-                          ? 'bg-blue-600 text-white'
-                          : index + 1 < currentStep
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 text-gray-600'
-                      }`}
-                    >
-                      {index + 1 < currentStep ? '✓' : index + 1}
-                    </div>
-                    <span className="text-sm font-medium">{step}</span>
-                  </div>
-                </React.Fragment>
-              ))}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="max-w-2xl w-full p-6">
+        <h1 className="text-2xl font-bold text-center mb-8 text-gray-800">
+          Campaign Management
+        </h1>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Create Campaign Card */}
+          <button
+            onClick={() => router.push('/admin/create-campaign')}
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center gap-4 border border-gray-200"
+          >
+            <PlusCircle className="w-12 h-12 text-blue-600" />
+            <div className="text-center">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Create Campaign</h2>
+              <p className="text-gray-600">Launch a new personalized campaign with custom content</p>
             </div>
-          </div>
-        </div>
-      )}
+          </button>
 
-      {/* Main Content */}
-      <div className={currentStep === 5 ? '' : 'max-w-7xl mx-auto py-6 px-4'}>
-        {renderStep()}
+          {/* View Dashboard Card */}
+          <button
+            onClick={() => router.push('/admin/dashboard')}
+            className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center gap-4 border border-gray-200"
+          >
+            <BarChart3 className="w-12 h-12 text-blue-600" />
+            <div className="text-center">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">View Dashboard</h2>
+              <p className="text-gray-600">Monitor and analyze your active campaign performance</p>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   );

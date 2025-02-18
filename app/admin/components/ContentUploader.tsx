@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent, DragEvent } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 interface UploadedFile {
   id: string;
@@ -14,6 +15,7 @@ interface ContentUploaderProps {
   onFileUpload?: (files: UploadedFile[]) => void;
   onObjectiveChange?: (objective: string) => void;
   onNext: () => void;
+  onBack:() => void;
 }
 
 const predefinedObjectives = [
@@ -26,7 +28,7 @@ const predefinedObjectives = [
 
 const ContentUploader: React.FC<ContentUploaderProps> = ({ 
   onNext,
-  
+  onBack,
   onObjectiveChange 
 }) => {
   const [presentationFiles, setPresentationFiles] = useState<UploadedFile[]>([]);
@@ -313,14 +315,22 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
           )}
         </div>
       </div>
-      <div className="mt-4 flex justify-end">
-        <button
-          onClick={onNext}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Proceed
-        </button>
-      </div>
+      <div className="flex justify-between">
+          <button
+            onClick={onBack}
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 flex items-center gap-2"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            Back to Edit
+          </button>
+          <button
+            onClick={onNext}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+          >
+            
+            Proceed
+          </button>
+        </div>
     </div>
   );
 };

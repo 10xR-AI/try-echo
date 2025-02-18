@@ -12,13 +12,9 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
   const [password, setPassword] = useState<string>('');
   const [authError, setAuthError] = useState<string>('');
 
-
-  const ADMIN_EMAIL = 'admin@try-echo.com';
-  const ADMIN_PASSWORD = '123456';
-
   const handleLogin = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    if (email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       setAuthError('');
       onLogin(true);
     } else {

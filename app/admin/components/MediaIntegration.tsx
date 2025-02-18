@@ -3,7 +3,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Camera, Mic, Calendar, Database, ListPlus } from 'lucide-react';
-
+import { ArrowLeft } from 'lucide-react';
 
 interface Integration {
   id: string;
@@ -16,9 +16,10 @@ interface Integration {
 
 interface MediaIntegrationsProps {
   onNext: () => void;
+  onBack: () => void
 }
 
-const MediaIntegrations: React.FC<MediaIntegrationsProps> = ({ onNext }) => {
+const MediaIntegrations: React.FC<MediaIntegrationsProps> = ({ onNext,onBack }) => {
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -306,14 +307,21 @@ const MediaIntegrations: React.FC<MediaIntegrationsProps> = ({ onNext }) => {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-end">
-        <button
-          onClick={onNext}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Next
-        </button>
-      </div>
+      <div className="flex justify-between">
+          <button
+            onClick={onBack}
+            className="px-4 py-2 text-gray-600 hover:text-gray-800 flex items-center gap-2"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            Back to Edit
+          </button>
+          <button
+            onClick={onNext}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+          >
+            Proceed
+          </button>
+        </div>
     </div>
   );
 };
